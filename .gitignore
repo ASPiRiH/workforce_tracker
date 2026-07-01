@@ -1,0 +1,8 @@
+_build/
+logs/
+.idea/
+erl_crash.dump
+*.beam
+*.plt
+rebar3
+*.iml

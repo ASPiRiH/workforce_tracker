@@ -1,0 +1,17 @@
+{application, workforce_tracker, [
+    {description, "Time tracking via NFC cards"},
+    {vsn,         "1.0.0"},
+    {registered,  []},
+    {mod,         {wt_app, []}},
+    {applications, [
+        kernel,
+        stdlib,
+        amqp_client,
+        epgsql,
+        jsx,
+        liver,
+        poolboy
+    ]},
+    {env, []},
+    {modules, []}
+]}.

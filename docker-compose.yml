@@ -1,0 +1,41 @@
+services:
+  app:
+    build: .
+    depends_on:
+      broker:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    environment:
+      AMQP_HOST:   broker
+      PG_HOST:     db
+      PG_PASSWORD: secret
+    restart: on-failure
+
+  broker:
+    image: rabbitmq:3.13-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 5s
+      retries: 10
+
+  db:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB:       workforce
+      POSTGRES_USER:     wt
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - wt_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "wt", "-d", "workforce"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  wt_data:
